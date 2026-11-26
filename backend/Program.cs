@@ -13,7 +13,7 @@ builder.Services.AddSingleton<NpgsqlDataSource>(_ =>
     var connectionString =
         builder.Configuration.GetConnectionString("PostgreSql")
         ?? throw new InvalidOperationException(
-            "Не найдена строка подключения PostgreSql");
+            "РќРµ РЅР°Р№РґРµРЅР° СЃС‚СЂРѕРєР° РїРѕРґРєР»СЋС‡РµРЅРёСЏ PostgreSql");
 
     return NpgsqlDataSource.Create(connectionString);
 });
@@ -24,21 +24,23 @@ builder.Services.AddHttpClient<NotificationService>();
 
 builder.Services.AddHostedService<NotificationBackgroundService>();
 
+builder.Services.AddHostedService<DatabaseCleanupService>();
+
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 
 var secretKey = jwtSettings["SecretKey"]
-    ?? throw new InvalidOperationException("Не задан Jwt:SecretKey");
+    ?? throw new InvalidOperationException("РќРµ Р·Р°РґР°РЅ Jwt:SecretKey");
 
 var issuer = jwtSettings["Issuer"]
-    ?? throw new InvalidOperationException("Не задан Jwt:Issuer");
+    ?? throw new InvalidOperationException("РќРµ Р·Р°РґР°РЅ Jwt:Issuer");
 
 var audience = jwtSettings["Audience"]
-    ?? throw new InvalidOperationException("Не задан Jwt:Audience");
+    ?? throw new InvalidOperationException("РќРµ Р·Р°РґР°РЅ Jwt:Audience");
 
 if (Encoding.UTF8.GetByteCount(secretKey) < 32)
 {
     throw new InvalidOperationException(
-        "Секретный ключ JWT должен содержать минимум 32 байта");
+        "РЎРµРєСЂРµС‚РЅС‹Р№ РєР»СЋС‡ JWT РґРѕР»Р¶РµРЅ СЃРѕРґРµСЂР¶Р°С‚СЊ РјРёРЅРёРјСѓРј 32 Р±Р°Р№С‚Р°");
 }
 
 builder.Services
@@ -74,7 +76,7 @@ builder.Services.AddSwaggerGen(options =>
 
     options.IncludeXmlComments(xmlPath);
 
-    // Настройка JWT в Swagger
+    // РќР°СЃС‚СЂРѕР№РєР° JWT РІ Swagger
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -82,7 +84,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "bearer",
         BearerFormat = "JWT",
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Введите JWT-токен"
+        Description = "Р’РІРµРґРёС‚Рµ JWT-С‚РѕРєРµРЅ"
     });
 
     options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
@@ -109,7 +111,7 @@ await RootUserSeeder.SeedAsync(
     app.Services.GetRequiredService<NpgsqlDataSource>()
 );
 
-app.MapGet("/db-test", async (NpgsqlDataSource dataSource) =>
+app.MapGet("/api/health", async (NpgsqlDataSource dataSource) =>
 {
     await using var connection =
         await dataSource.OpenConnectionAsync();
@@ -123,7 +125,7 @@ app.MapGet("/db-test", async (NpgsqlDataSource dataSource) =>
 
     return Results.Ok(new
     {
-        Status = "Подключение успешно"
+        Status = "РџРѕРґРєР»СЋС‡РµРЅРёРµ СѓСЃРїРµС€РЅРѕ"
     });
 });
 
