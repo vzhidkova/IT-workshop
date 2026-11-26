@@ -1,0 +1,51 @@
+# Мониторинг LogHive: Prometheus + Grafana + node-exporter (ВМ 3, Алёна)
+# Запуск: docker compose up -d   (рядом должны лежать prometheus.yml и .env)
+services:
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=15d   # хранить метрики 15 дней (устав)
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"   # только с самой ВМ 3 (устав, N-07); снаружи — через SSH-туннель
+    mem_limit: 512m
+
+  grafana:
+    image: grafana/grafana:11.3.0
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    mem_limit: 512m
+
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    restart: unless-stopped
+    pid: host
+    command:
+      - --path.rootfs=/host
+    volumes:
+      - /:/host:ro,rslave
+    # порт наружу не публикуем: Prometheus ходит к нему по внутренней сети Docker
+    mem_limit: 64m
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.25.0
+    restart: unless-stopped
+    # порт наружу не публикуем: проверки делает Prometheus по внутренней сети Docker
+    mem_limit: 64m
+
+volumes:
+  prometheus-data:
+  grafana-data:

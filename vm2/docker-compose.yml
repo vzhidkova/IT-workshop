@@ -1,0 +1,76 @@
+# ВМ 2 (Шоди): Mattermost + его PostgreSQL + node-exporter + агент сбора логов
+# Запуск:        docker compose up -d
+# Агент (когда API на ВМ 1 готов и agent.py лежит в ./agent):
+#                docker compose --profile agent up -d
+services:
+  mm-db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: mmuser
+      POSTGRES_PASSWORD: ${MM_DB_PASSWORD}
+      POSTGRES_DB: mattermost
+    volumes:
+      - mm-db-data:/var/lib/postgresql/data
+    # порт наружу не публикуем: БД нужна только Mattermost (устав, N-07)
+    mem_limit: 512m
+
+  mattermost:
+    image: mattermost/mattermost-team-edition:${MM_IMAGE_TAG}
+    container_name: mattermost          # по этому имени агент находит контейнер
+    restart: unless-stopped
+    depends_on:
+      - mm-db
+    environment:
+      MM_SQLSETTINGS_DRIVERNAME: postgres
+      MM_SQLSETTINGS_DATASOURCE: postgres://mmuser:${MM_DB_PASSWORD}@mm-db:5432/mattermost?sslmode=disable&connect_timeout=10
+      MM_SERVICESETTINGS_SITEURL: ${MM_SITE_URL}
+      MM_SERVICESETTINGS_ENABLEINCOMINGWEBHOOKS: "true"   # нужен для оповещений LogHive и Grafana
+      MM_SERVICESETTINGS_ENABLEPOSTUSERNAMEOVERRIDE: "true"
+      MM_LOGSETTINGS_CONSOLEJSON: "true"                  # логи в JSON — агент разбирает уровень и текст
+      MM_LOGSETTINGS_CONSOLELEVEL: INFO
+    volumes:
+      - mm-config:/mattermost/config
+      - mm-data:/mattermost/data
+      - mm-logs:/mattermost/logs
+      - mm-plugins:/mattermost/plugins
+    ports:
+      - "8065:8065"   # пользователи через VPN и вебхук для ВМ 1 / ВМ 3
+    mem_limit: 2g
+
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    restart: unless-stopped
+    # host-сеть: порт 9100 открывается прямо на ВМ, поэтому его закрывает ufw
+    # (порты, опубликованные через "ports:", Docker пропускает мимо ufw)
+    network_mode: host
+    pid: host
+    command:
+      - --path.rootfs=/host
+    volumes:
+      - /:/host:ro,rslave
+    mem_limit: 64m
+
+  agent:
+    build: ./agent
+    restart: unless-stopped
+    profiles: ["agent"]
+    depends_on:
+      - mattermost
+    environment:
+      MM_CONTAINER_NAME: mattermost
+      API_URL: ${API_URL}
+      LOG_TOKEN: ${LOG_TOKEN}
+      SQLITE_PATH: /data/logs_queue.db
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro   # чтение логов контейнера Mattermost
+      - agent-queue:/data                              # очередь переживает перезапуск агента
+    mem_limit: 128m
+
+volumes:
+  mm-db-data:
+  mm-config:
+  mm-data:
+  mm-logs:
+  mm-plugins:
+  agent-queue:

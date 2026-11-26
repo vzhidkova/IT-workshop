@@ -1,0 +1,30 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Загрузка CPU/памяти/диска всех трёх ВМ (node-exporter)
+  - job_name: node
+    static_configs:
+      - targets: ["node-exporter:9100", "192.168.71.10:9100", "192.168.71.13:9100"]
+
+  # Доступность сервисов (жив ли API и Mattermost). probe_success = 1 — отвечает, 0 — упал.
+  # Оповещение в Grafana: probe_success == 0 дольше 1 минуты (устав, N-05).
+  - job_name: blackbox
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          - http://192.168.71.10/api/health               # API LogHive через nginx
+          - http://192.168.71.13:8065/api/v4/system/ping  # Mattermost
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
