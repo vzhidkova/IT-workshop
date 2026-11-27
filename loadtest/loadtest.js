@@ -106,7 +106,7 @@ export function read(data) {
     check(res, { 'список групп 200': (x) => x.status === 200 });
   } else if (r < 0.9) {
     const id = data.ids[Math.floor(Math.random() * data.ids.length)];
-    const res = http.get(`${API}/api/issues/${id}`,
+    const res = http.get(`${API}/api/issues/${id}?period=7d`,
       Object.assign({ tags: { op: 'detail' } }, params));
     check(res, { 'карточка 200': (x) => x.status === 200 });
   } else {
