@@ -1,0 +1,61 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+     execution: local
+        script: /scripts/loadtest.js
+        output: -
+
+     scenarios: (100.00%) 6 scenarios, 130 max VUs, 17m30s max duration (incl. graceful stop):
+              * warmup_read: 2.00 iterations/s for 2m0s (maxVUs: 2-10, exec: read, gracefulStop: 30s)
+              * warmup_write: 1.00 iterations/s for 2m0s (maxVUs: 2-10, exec: write, gracefulStop: 30s)
+              * normal_read: 2.00 iterations/s for 10m0s (maxVUs: 2-10, exec: read, startTime: 2m0s, gracefulStop: 30s)
+              * normal_write: 1.00 iterations/s for 10m0s (maxVUs: 2-10, exec: write, startTime: 2m0s, gracefulStop: 30s)
+              * peak_read: 2.00 iterations/s for 5m0s (maxVUs: 2-10, exec: read, startTime: 12m0s, gracefulStop: 30s)
+              * peak_write: 50.00 iterations/s for 5m0s (maxVUs: 20-100, exec: write, startTime: 12m0s, gracefulStop: 30s)
+
+
+... (строки прогресса по секундам убраны) ...
+
+peak_write     [ 100% ] 000/020 VUs  4m59.7s/5m0s  50.00 iters/s
+
+     ✓ запись принята
+     ✓ список групп 200
+     ✓ карточка 200
+     ✓ график 200
+
+     checks.........................: 100.00% 17766 out of 17766
+     data_received..................: 13 MB   13 kB/s
+     data_sent......................: 34 MB   33 kB/s
+     http_req_blocked...............: avg=6.38µs   p(50)=4.89µs   p(95)=9.21µs   max=872.51µs
+     http_req_connecting............: avg=752ns    p(50)=0s       p(95)=0s       max=808.44µs
+     http_req_duration..............: avg=17ms     p(50)=2.61ms   p(95)=137.91ms max=352.68ms
+       { expected_response:true }...: avg=17ms     p(50)=2.61ms   p(95)=137.91ms max=352.68ms
+     ✓ { op:list,phase:normal }.....: avg=139.95ms p(50)=139.53ms p(95)=152.13ms max=327.78ms
+     ✓ { op:list,phase:peak }.......: avg=177.78ms p(50)=169.66ms p(95)=220.46ms max=352.68ms
+     ✓ { op:write,phase:normal }....: avg=7.57ms   p(50)=7.3ms    p(95)=10.05ms  max=33.47ms 
+     ✓ { op:write,phase:peak }......: avg=3.07ms   p(50)=2.41ms   p(95)=5.66ms   max=70.03ms 
+     http_req_failed................: 0.00%   0 out of 17768
+     ✓ { phase:normal }.............: 0.00%   0 out of 1802
+     ✓ { phase:peak }...............: 0.00%   0 out of 15602
+     http_req_receiving.............: avg=64.08µs  p(50)=28.97µs  p(95)=224.85µs max=2.11ms  
+     http_req_sending...............: avg=19.65µs  p(50)=13.48µs  p(95)=28.67µs  max=1.13ms  
+     http_req_tls_handshaking.......: avg=0s       p(50)=0s       p(95)=0s       max=0s      
+     http_req_waiting...............: avg=16.92ms  p(50)=2.52ms   p(95)=137.6ms  max=352.53ms
+     http_reqs......................: 17768   17.412605/s
+     iteration_duration.............: avg=17.17ms  p(50)=2.78ms   p(95)=138.12ms max=353.28ms
+     iterations.....................: 17766   17.410645/s
+     vus............................: 0       min=0              max=2 
+     vus_max........................: 26      min=26             max=26
+
+
+running (17m00.4s), 000/026 VUs, 17766 complete and 0 interrupted iterations
+warmup_read  ✓ [ 100% ] 00/02 VUs    2m0s   2.00 iters/s
+warmup_write ✓ [ 100% ] 00/02 VUs    2m0s   1.00 iters/s
+normal_read  ✓ [ 100% ] 00/02 VUs    10m0s  2.00 iters/s
+normal_write ✓ [ 100% ] 00/02 VUs    10m0s  1.00 iters/s
+peak_read    ✓ [ 100% ] 00/02 VUs    5m0s   2.00 iters/s
+peak_write   ✓ [ 100% ] 000/020 VUs  5m0s   50.00 iters/s
