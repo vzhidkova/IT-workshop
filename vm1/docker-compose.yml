@@ -29,7 +29,7 @@ services:
   # ASP.NET Core Backend
   backend:
     build:
-      context: ./backend
+      context: ../backend
       dockerfile: Dockerfile
 
     container_name: loghive-api
@@ -57,10 +57,10 @@ services:
       - loghive-network
 
 
- # React Frontend + Nginx
+  # React Frontend + Nginx
   frontend:
     build:
-      context: ./frontend
+      context: ../frontend
       dockerfile: Dockerfile
 
     container_name: loghive-frontend
