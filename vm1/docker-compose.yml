@@ -57,7 +57,7 @@ services:
       - loghive-network
 
 
-  # React Frontend + Nginx
+ # React Frontend + Nginx
   frontend:
     build:
       context: ../frontend
@@ -79,14 +79,7 @@ services:
       - loghive-network
 
 
-volumes:
-  postgres_data:
-
-
-networks:
-  loghive-network:
-    driver: bridge
-
+  # Метрики ВМ1 для Prometheus (порт 9100, доступ только с ВМ3)
   node-exporter:
     image: prom/node-exporter:v1.8.2
     container_name: node-exporter
@@ -96,3 +89,12 @@ networks:
     volumes:
       - /:/host:ro,rslave
     command: --path.rootfs=/host
+
+
+volumes:
+  postgres_data:
+
+
+networks:
+  loghive-network:
+    driver: bridge
