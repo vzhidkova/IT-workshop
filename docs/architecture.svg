@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1180" viewBox="0 0 1600 1180" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="a-dark" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3c4043"/></marker>
+    <marker id="a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1a73e8"/></marker>
+    <marker id="a-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+    <marker id="a-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e37400"/></marker>
+    <marker id="a-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#80868b"/></marker>
+    <style>
+      .t  { font-size: 17px; font-weight: 600; fill: #202124; }
+      .s  { font-size: 13.5px; fill: #5f6368; }
+      .h  { font-size: 20px; font-weight: 700; fill: #ffffff; }
+      .hs { font-size: 14px; fill: #ffffff; }
+      .lb { font-size: 14px; fill: #202124; }
+      .lbb{ font-size: 14px; font-weight: 600; fill: #202124; }
+      .box{ fill: #ffffff; stroke: #9aa0a6; stroke-width: 1.2; }
+      .pill{ fill: #ffffff; stroke: #dadce0; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1180" fill="#ffffff"/>
+
+  <!-- Заголовок -->
+  <text x="800" y="46" text-anchor="middle" font-size="28" font-weight="700" fill="#202124">LogHive — архитектура учебного стенда</text>
+  <text x="800" y="76" text-anchor="middle" font-size="16" fill="#5f6368">3 ВМ в облаке BASIS · каждая 1 vCPU / 4 ГБ RAM / 20 ГБ · сервисы в Docker Compose</text>
+
+  <!-- Пользователи -->
+  <rect x="560" y="98" width="480" height="72" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="1.4"/>
+  <text x="800" y="128" text-anchor="middle" class="t">Пользователи и команда</text>
+  <text x="800" y="152" text-anchor="middle" class="s">доступ к стенду только через OpenVPN BASIS</text>
+
+  <!-- Доступ пользователей -->
+  <line x1="640" y1="170" x2="380" y2="238" stroke="#80868b" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-gray)"/>
+  <text x="470" y="196" class="s" text-anchor="middle">веб-панель :80</text>
+  <line x1="960" y1="170" x2="1220" y2="238" stroke="#80868b" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-gray)"/>
+  <text x="1135" y="196" class="s" text-anchor="middle">Mattermost :8065</text>
+  <line x1="800" y1="170" x2="800" y2="758" stroke="#80868b" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#a-gray)"/>
+  <text x="810" y="215" class="s">Grafana :3000</text>
+
+  <!-- ===== ВМ 1 ===== -->
+  <rect x="60" y="240" width="620" height="380" rx="12" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2"/>
+  <path d="M60,252 a12,12 0 0 1 12,-12 h596 a12,12 0 0 1 12,12 v38 h-620 z" fill="#1a73e8"/>
+  <text x="80" y="271" class="h">ВМ 1 · Приложение</text>
+  <text x="660" y="271" class="hs" text-anchor="end">192.168.71.10 · Жидкова В.</text>
+
+  <rect x="90" y="310" width="260" height="65" rx="8" class="box"/>
+  <text x="220" y="337" text-anchor="middle" class="t">nginx :80</text>
+  <text x="220" y="359" text-anchor="middle" class="s">веб-панель + прокси /api</text>
+
+  <rect x="90" y="400" width="260" height="110" rx="8" class="box"/>
+  <text x="220" y="426" text-anchor="middle" class="t">API LogHive (.NET)</text>
+  <text x="220" y="448" text-anchor="middle" class="s">приём записей, группировка</text>
+  <text x="220" y="468" text-anchor="middle" class="s">очередь оповещений (outbox)</text>
+  <text x="220" y="488" text-anchor="middle" class="s">удаление записей старше 14 дн</text>
+
+  <rect x="90" y="535" width="260" height="62" rx="8" class="box"/>
+  <text x="220" y="561" text-anchor="middle" class="t">PostgreSQL 18</text>
+  <text x="220" y="583" text-anchor="middle" class="s">БД LogHiveDB (том Docker)</text>
+
+  <line x1="220" y1="375" x2="220" y2="398" stroke="#3c4043" stroke-width="1.6" marker-end="url(#a-dark)"/>
+  <line x1="220" y1="510" x2="220" y2="533" stroke="#3c4043" stroke-width="1.6" marker-end="url(#a-dark)"/>
+
+  <rect x="390" y="310" width="220" height="55" rx="8" class="box"/>
+  <text x="500" y="333" text-anchor="middle" class="t">node-exporter</text>
+  <text x="500" y="353" text-anchor="middle" class="s">метрики ВМ :9100</text>
+
+  <text x="522" y="560" class="lbb">Открытые порты:</text>
+  <text x="522" y="580" class="lb">80 — VPN</text><text x="600" y="580" class="lb">22 — SSH</text>
+  <text x="522" y="600" class="lb">9100 — только ВМ 3</text>
+
+  <!-- ===== ВМ 2 ===== -->
+  <rect x="920" y="240" width="620" height="380" rx="12" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+  <path d="M920,252 a12,12 0 0 1 12,-12 h596 a12,12 0 0 1 12,12 v38 h-620 z" fill="#188038"/>
+  <text x="940" y="271" class="h">ВМ 2 · Наблюдаемый сервис</text>
+  <text x="1520" y="271" class="hs" text-anchor="end">192.168.71.13 · Икромжонов Ш.</text>
+
+  <rect x="950" y="310" width="300" height="110" rx="8" class="box"/>
+  <text x="1100" y="336" text-anchor="middle" class="t">Агент логов (Python)</text>
+  <text x="1100" y="358" text-anchor="middle" class="s">читает логи контейнера Mattermost</text>
+  <text x="1100" y="378" text-anchor="middle" class="s">очередь в SQLite, повтор при сбое</text>
+  <text x="1100" y="398" text-anchor="middle" class="s">уровни INFO / WARN / ERROR</text>
+
+  <rect x="950" y="470" width="300" height="70" rx="8" class="box"/>
+  <text x="1100" y="498" text-anchor="middle" class="t">Mattermost 9.11 :8065</text>
+  <text x="1100" y="520" text-anchor="middle" class="s">команда loghive, канал #errors</text>
+
+  <rect x="1290" y="470" width="220" height="70" rx="8" class="box"/>
+  <text x="1400" y="498" text-anchor="middle" class="t">PostgreSQL</text>
+  <text x="1400" y="520" text-anchor="middle" class="s">БД Mattermost</text>
+
+  <rect x="1290" y="310" width="220" height="55" rx="8" class="box"/>
+  <text x="1400" y="333" text-anchor="middle" class="t">node-exporter</text>
+  <text x="1400" y="353" text-anchor="middle" class="s">метрики ВМ :9100</text>
+
+  <line x1="1100" y1="470" x2="1100" y2="422" stroke="#3c4043" stroke-width="1.6" stroke-dasharray="5 4" marker-end="url(#a-dark)"/>
+  <text x="1110" y="452" class="s">логи (docker)</text>
+  <line x1="1250" y1="505" x2="1288" y2="505" stroke="#3c4043" stroke-width="1.6" marker-end="url(#a-dark)"/>
+
+  <text x="1125" y="572" class="lbb">Открытые порты:</text>
+  <text x="1125" y="592" class="lb">8065 — VPN, ВМ 1 и ВМ 3 · 22 — SSH</text>
+  <text x="1125" y="612" class="lb">9100 — только для ВМ 3</text>
+
+  <!-- ① логи: агент → API -->
+  <line x1="950" y1="410" x2="352" y2="410" stroke="#1a73e8" stroke-width="2.6" marker-end="url(#a-blue)"/>
+  <rect x="682" y="360" width="236" height="44" rx="8" class="pill"/>
+  <text x="800" y="378" text-anchor="middle" class="lbb" fill="#1a73e8">① логи → API</text>
+  <text x="800" y="396" text-anchor="middle" class="s">POST /api/logs + ключ X-Api-Key</text>
+
+  <!-- ② оповещение: API → Mattermost -->
+  <line x1="350" y1="490" x2="948" y2="505" stroke="#d93025" stroke-width="2.6" marker-end="url(#a-red)"/>
+  <rect x="682" y="514" width="236" height="44" rx="8" class="pill"/>
+  <text x="800" y="532" text-anchor="middle" class="lbb">② оповещение ERROR / WARN</text>
+  <text x="800" y="550" text-anchor="middle" class="s">вебхук → канал #errors</text>
+
+  <!-- ===== ВМ 3 ===== -->
+  <rect x="340" y="760" width="920" height="330" rx="12" fill="#fef7e0" stroke="#e37400" stroke-width="2"/>
+  <path d="M340,772 a12,12 0 0 1 12,-12 h896 a12,12 0 0 1 12,12 v38 h-920 z" fill="#e37400"/>
+  <text x="360" y="791" class="h">ВМ 3 · Контроль и копии</text>
+  <text x="1240" y="791" class="hs" text-anchor="end">192.168.71.7 · Иванова А. · порты: 3000 — VPN, 22 — SSH</text>
+
+  <rect x="370" y="830" width="250" height="70" rx="8" class="box"/>
+  <text x="495" y="858" text-anchor="middle" class="t">Prometheus</text>
+  <text x="495" y="880" text-anchor="middle" class="s">сбор метрик всех ВМ, 15 дней</text>
+
+  <rect x="370" y="920" width="250" height="70" rx="8" class="box"/>
+  <text x="495" y="948" text-anchor="middle" class="t">blackbox-exporter</text>
+  <text x="495" y="970" text-anchor="middle" class="s">проверка доступности сервисов</text>
+
+  <rect x="660" y="830" width="250" height="70" rx="8" class="box"/>
+  <text x="785" y="858" text-anchor="middle" class="t">Grafana :3000</text>
+  <text x="785" y="880" text-anchor="middle" class="s">дашборд + правила оповещений</text>
+
+  <rect x="660" y="920" width="250" height="70" rx="8" class="box"/>
+  <text x="785" y="948" text-anchor="middle" class="t">node-exporter</text>
+  <text x="785" y="970" text-anchor="middle" class="s">метрики ВМ 3</text>
+
+  <line x1="620" y1="865" x2="658" y2="865" stroke="#3c4043" stroke-width="1.6" marker-end="url(#a-dark)"/>
+
+  <rect x="950" y="830" width="280" height="160" rx="8" class="box"/>
+  <text x="1090" y="858" text-anchor="middle" class="t">Резервные копии БД</text>
+  <text x="1090" y="884" text-anchor="middle" class="s">backup.sh по cron: каждый час и сутки</text>
+  <text x="1090" y="906" text-anchor="middle" class="s">pg_dump по SSH с ВМ 1 → .sql.gz</text>
+  <text x="1090" y="928" text-anchor="middle" class="s">хранятся 3 часовые + 7 суточных</text>
+  <text x="1090" y="950" text-anchor="middle" class="s">restore-test.sh — проверка</text>
+  <text x="1090" y="970" text-anchor="middle" class="s">восстановления копии</text>
+
+  <text x="370" y="1022" class="s">RPO ≤ 1 ч (часовые копии) · RTO ≤ 30 мин · копии хранятся отдельно от БД</text>
+  <text x="370" y="1044" class="s">Оповещение при недоступности API или Mattermost дольше 1 минуты</text>
+
+  <!-- ③④⑥ ВМ 3 → ВМ 1 -->
+  <line x1="500" y1="760" x2="500" y2="368" stroke="#e37400" stroke-width="2.6" marker-end="url(#a-orange)"/>
+  <rect x="96" y="648" width="390" height="80" rx="8" class="pill"/>
+  <text x="112" y="672" class="lb">③ метрики ВМ 1 → node-exporter :9100</text>
+  <text x="112" y="694" class="lb">④ проверка доступности /api/health :80</text>
+  <text x="112" y="716" class="lb">⑥ копия БД: pg_dump по SSH :22</text>
+
+  <!-- ③④⑤ ВМ 3 → ВМ 2 -->
+  <line x1="1100" y1="760" x2="1100" y2="542" stroke="#e37400" stroke-width="2.6" marker-end="url(#a-orange)"/>
+  <rect x="1116" y="648" width="410" height="80" rx="8" class="pill"/>
+  <text x="1132" y="672" class="lb">③ метрики ВМ 2 → node-exporter :9100</text>
+  <text x="1132" y="694" class="lb">④ проверка Mattermost /api/v4/system/ping</text>
+  <text x="1132" y="716" class="lb">⑤ оповещение Grafana → вебхук #errors</text>
+
+  <!-- Подпись -->
+  <line x1="60" y1="1112" x2="1540" y2="1112" stroke="#dadce0"/>
+  <text x="60" y="1138" class="s">Стрелка показывает, кто открывает соединение. Все ВМ в одной внутренней сети BASIS 192.168.71.0/24; PostgreSQL и экспортеры снаружи недоступны.</text>
+  <text x="60" y="1160" class="s">Секреты (ключ приёма логов, URL вебхука, пароли БД) хранятся только в файлах .env на ВМ и не попадают в репозиторий.</text>
+</svg>
